@@ -5,6 +5,8 @@
 package it.polito.tdp.artsmia;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.artsmia.model.Model;
@@ -26,7 +28,7 @@ public class FXMLController {
     private URL location;
 
     @FXML // fx:id="boxLUN"
-    private ChoiceBox<?> boxLUN; // Value injected by FXMLLoader
+    private ChoiceBox<Integer> boxLUN; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnCalcolaComponenteConnessa"
     private Button btnCalcolaComponenteConnessa; // Value injected by FXMLLoader
@@ -65,6 +67,12 @@ public class FXMLController {
     	    	 int i = Integer.parseInt(id);
     	    	 if(this.model.check(i)=="Trovato") {
     	    		 txtResult.appendText( this.model.trovaComponenteConnessa(i)+"\n");
+    	    		 List<Integer> li= new ArrayList<>();
+    	    		 
+    	    		 for(int j =2 ;j<=this.model.compConnN();j++) {
+    	    			 li.add(j);
+    	    		 }
+    	    		 boxLUN.getItems().addAll(li);
     	    	 } 
     	    	 else
     	    		 txtResult.appendText("La componente inserita non è stata trovata, effetuare prima il check \n");

@@ -74,6 +74,9 @@ public String trovaComponenteConnessa(int s) {
 	
 	
 }
+public int compConnN() {
+	return compConn.size();
+}
 
 
 
