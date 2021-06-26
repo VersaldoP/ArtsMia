@@ -2,13 +2,16 @@ package it.polito.tdp.artsmia.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 import it.polito.tdp.artsmia.db.ArtsmiaDAO;
 
@@ -18,6 +21,7 @@ private ArtsmiaDAO dao;
 private Graph<ArtObject,DefaultWeightedEdge> grafo;
 private Map<Integer,ArtObject> idMap;
 private List<Adiacenza> archi;
+private Set<ArtObject> compConn;
 
 public Model() {
 	dao = new ArtsmiaDAO();
@@ -56,6 +60,19 @@ public String check(int check) {
 		return"Trovato";
 	else
 		return "Non trovato, riprova";
+}
+
+public String trovaComponenteConnessa(int s) {
+	ArtObject start = idMap.get(s);
+	DepthFirstIterator<ArtObject,DefaultWeightedEdge> dfv = new DepthFirstIterator<>(this.grafo,start);
+	compConn = new HashSet<>();
+	while(dfv.hasNext()) {
+		ArtObject o = dfv.next();
+		compConn.add(o);
+	}
+	return"la dimensione della Componente Connessa ="+compConn.size()+"\n"+compConn.toString();
+	
+	
 }
 
 

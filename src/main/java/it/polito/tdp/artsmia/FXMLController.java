@@ -59,7 +59,20 @@ public class FXMLController {
 
     @FXML
     void doCalcolaComponenteConnessa(ActionEvent event) {
-
+    	  String id = txtObjectId.getText();
+    	     try {
+    	     
+    	    	 int i = Integer.parseInt(id);
+    	    	 if(this.model.check(i)=="Trovato") {
+    	    		 txtResult.appendText( this.model.trovaComponenteConnessa(i)+"\n");
+    	    	 } 
+    	    	 else
+    	    		 txtResult.appendText("La componente inserita non è stata trovata, effetuare prima il check \n");
+    	    	
+    	     }
+    	     catch(NumberFormatException e) {
+    	     txtResult.appendText("Errore, devi immettere un id nella casella id_obj \n");
+    	     }
     }
 
     @FXML
