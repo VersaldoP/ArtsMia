@@ -49,11 +49,12 @@ public class FXMLController {
     void doAnalizzaOggetti(ActionEvent event) {
     	//creo il grafo
     	txtResult.clear();
-    	this.model.creaGrafo();
-    	txtResult.appendText("GRAFO CREATO!!\n\n");
-    	txtResult.appendText("# VERTICI: "+ this.model.getNVertici());
-    	txtResult.appendText("# ARCHI: "+this.model.getNArchi());
+    
+    	this.model.creaGrafo();                                                        
     	
+    	txtResult.appendText("Grafo Creato \n");
+    	txtResult.appendText(this.model.getNvertex()+"\n");
+    	txtResult.appendText(this.model.getNedge()+"\n");
     }
 
     @FXML
@@ -63,7 +64,15 @@ public class FXMLController {
 
     @FXML
     void doCercaOggetti(ActionEvent event) {
-
+     String id = txtObjectId.getText();
+     try {
+     
+    	 int i = Integer.parseInt(id);
+    	txtResult.appendText( this.model.check(i)+"\n");
+     }
+     catch(NumberFormatException e) {
+     txtResult.appendText("Errore, devi immettere un id nella casella id_obj \n");
+     }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

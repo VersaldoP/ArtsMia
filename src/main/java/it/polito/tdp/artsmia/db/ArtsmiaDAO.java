@@ -42,62 +42,38 @@ public class ArtsmiaDAO {
 			return ;
 		}
 	}
+  
+ 
+   public List<Adiacenza> listAdiacenze(Map<Integer,ArtObject>map) {
+		
+	   String sql = "SELECT distinct e1.object_id as obj1,e2.object_id as obj2,COUNT(DISTINCT e1.exhibition_id)as peso "
+		   		+ "FROM exhibition_objects e1, exhibition_objects e2 "
+		   		+ "WHERE e1.exhibition_id=e2.exhibition_id "
+		   		+ "AND e1.object_id<>e2.object_id "
+		   		+ "GROUP BY (e1.object_id) "
+		   		+ "HAVING COUNT(DISTINCT e1.exhibition_id)>0";
+		List<Adiacenza> result = new ArrayList<>();
+		Connection conn = DBConnect.getConnection();
 
-	public int getPeso(ArtObject a1, ArtObject a2) {
-		String sql = "SELECT COUNT(*) AS peso "
-				+ "FROM exhibition_objects e1,exhibition_objects e2 "
-				+ "WHERE e1.exhibition_id=e2.exhibition_id "
-				+ "AND  e1.object_id=? "
-				+ "AND e2.object_id=?";
-		
-		Connection conn = DBConnect.getConnection();
-		
 		try {
 			PreparedStatement st = conn.prepareStatement(sql);
-			st.setInt(1,a1.getId());
-			st.setInt(2,a2.getId());
 			ResultSet res = st.executeQuery();
-			int peso =0;
-			if(res.next()) {
-				peso= res.getInt("peso");
-			}
+			while (res.next()) {
+                  Adiacenza a = new Adiacenza (map.get(res.getInt("obj1")),map.get(res.getInt("obj2")),res.getInt("peso"));
+                  result.add(a);
+				
+				
+                   }
+                   
 			
+			
+		
 			conn.close();
-			return peso;
+			return result;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return 0;
-		}
-		
-		
-		
-		
-	}
-	public List<Adiacenza> getAdiacenze() {
-		String sql="SELECT e1.object_id as id1,e2.object_id as id2,COUNT(*) AS peso "
-				+ "FROM exhibition_objects e1,exhibition_objects e2 "
-				+ "WHERE e1.exhibition_id=e2.exhibition_id "
-				+ "AND e1.object_id>e2.object_id "
-				+ "GROUP BY e1.object_id, e2.object_id";
-		Connection conn = DBConnect.getConnection();
-		List<Adiacenza> adiacenze = new ArrayList<Adiacenza>();
-		try {
-			PreparedStatement st = conn.prepareStatement(sql);
-			
-			ResultSet res = st.executeQuery();
-			int peso =0;
-			while(res.next()) {
-				adiacenze.add(new Adiacenza(res.getInt("id1"),res.getInt("id2"),res.getInt("peso")));
-			}
-			
-			conn.close();
-			return adiacenze;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
+			return  null;
 		}
 	}
-	
 }
